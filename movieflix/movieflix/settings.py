@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-q-!*_xsr30wn67wccb8ur!5^nevi%nhvl#kb(4=@ypfmqk(ugc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
 
 AUTH_USER_MODEL = 'user.CustomUser'
 
@@ -41,10 +41,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'user',
-    'movies.apps.MoviesConfig'
+    'movies.apps.MoviesConfig',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,7 +54,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
+
+AUTH_USER_MODEL = 'user.CustomUser'
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ORIGIN_WHITELIST = (
+    "http://localhost:5501",
+    'http://localhost:8000'
+)
 
 ROOT_URLCONF = 'movieflix.urls'
 
@@ -74,6 +85,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'movieflix.wsgi.application'
 
+CORS_ALLOWED_ORIGINS = [
+"http://localhost:5501",
+"http://127.0.0.1:8000"
+]
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
