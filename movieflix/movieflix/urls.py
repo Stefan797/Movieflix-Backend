@@ -22,7 +22,7 @@ from user.views import CustomUserViewSet
 
 
 router = routers.DefaultRouter()
-router.register(r'user', CustomUserViewSet)
+router.register(r'userAPI', CustomUserViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
