@@ -9,12 +9,12 @@ def convert_720p(source):
 
 def convert480p(source):
     path = os.path.join(settings.MEDIA_ROOT, 'movie' )
-    ext = source.split('.')[0]
-    final_path = ext + '.mp4'
+    ext = source.rsplit('\x5c', 1)[0]
+    final_path = ext + '\x5c'
     destination_path = ext + '_480p.mp4'
+    new_path = source.split('\x5c')[-1]
+    new_path2 = new_path.split('.')[0] + '_480p.mp4'
+    print(final_path + new_path2)
     
-    
-    print(source)
-    
-    cmd = 'ffmpeg -i "{}" -s hd720 -c:v libx264 -crf 23 -c:a aac -strict -2 "{}"'.format(source, destination_path)    
-    subprocess.run(cmd, capture_output=True)
+    cmd = 'ffmpeg -i "{}" -s hd720 -c:v libx264 -crf 23 -c:a aac -strict -2 "{}"'.format(final_path, final_path + new_path2)    
+    run = subprocess.run(cmd, capture_output=True)
