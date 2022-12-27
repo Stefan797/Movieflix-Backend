@@ -11,21 +11,20 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all().order_by('-id')
     serializer_class = CustomUserSerializer
 
-    def create(self, request):
-        if request.method == 'POST':
-            """
-            This is a view to create an CustomUser.
-            """
-            new_User = CustomUser.objects.create(
-                email=request.POST['email'], 
-                username=request.POST['username'], 
-                first_name=request.POST['first_name'], 
-                last_name=request.POST['last_name'],
-                password=request.POST['password'])
-            new_User.save()
+#    def create(self, request):
+#       if request.method == 'POST':
+#            """
+#            This is a view to create an CustomUser.
+#            """
+#            new_User = CustomUser.objects.create(
+#                email=request.POST['email'], 
+#                first_name=request.POST['first_name'], 
+#                last_name=request.POST['last_name'],
+#                password=request.POST['password'])
+#            new_User.save()
 
-        serzialized_customUser = serializers.serialize('json', [new_User, ])
-        return HttpResponse(serzialized_customUser, content_type='application/json')
+           # serzialized_customUser = serializers.serialize('json', [new_User, ])
+         #   return HttpResponse(serzialized_customUser, content_type='application/json')
 
 
 # date_joined mit aktuellem datum versehen
