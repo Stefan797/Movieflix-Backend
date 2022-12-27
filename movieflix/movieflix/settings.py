@@ -61,7 +61,8 @@ AUTH_USER_MODEL = 'user.CustomUser'
 CORS_ORIGIN_ALLOW_ALL = True
 
 CORS_ORIGIN_WHITELIST = (
-    "http://localhost:5501",
+    'http://127.0.0.1:5500',
+    'http://localhost:5501',
     'http://localhost:8000'
 )
 
