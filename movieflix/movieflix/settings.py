@@ -46,10 +46,13 @@ INSTALLED_APPS = [
     'rest_framework',
     'user',
     'movies.apps.MoviesConfig',
-    'corsheaders'
+    'corsheaders',
+    'debug_toolbar',
+    'django_rq',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -60,6 +63,44 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
+
+CACHE_TTL = 60 * 15
+
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'PASSWORD': 'foobared',
+        'DEFAULT_TIMEOUT': 360,
+    },
+
+    # Priorität z.b für email versenden vor video conventieren !
+
+    # 'with-sentinel': {
+    #     'SENTINELS': [('localhost', 26736), ('localhost', 26737)],
+    #     'MASTER_NAME': 'redismaster',
+    #     'DB': 0,
+    #     'PASSWORD': 'secret',
+    #     'SOCKET_TIMEOUT': None,
+    #     'CONNECTION_KWARGS': {
+    #         'socket_connect_timeout': 0.3
+    #     },
+    # },
+    # 'high': {
+    #     'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379/0'), # If you're on Heroku
+    #     'DEFAULT_TIMEOUT': 500,
+    # },
+    # 'low': {
+    #     'HOST': 'localhost',
+    #     'PORT': 6379,
+    #     'DB': 0,
+    # }
+}
 
 AUTH_USER_MODEL = 'user.CustomUser'
 CORS_ORIGIN_ALLOW_ALL = True
