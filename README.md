@@ -7,3 +7,10 @@ C:\dev\backend\Neuer Ordner\Movieflix-Backend\movieflix\media\movie  || path
 C:\dev\backend\Neuer Ordner\Movieflix-Backend\movieflix\media\movie\Ozean_-_135658  // .mp4    <-- ursprungspath   || ext
 
 C:\dev\backend\Neuer Ordner\Movieflix-Backend\movieflix\media\movie\Qualle_-_110877.mp4 || source
+
+
+____ Using rqworker _____
+
+python manage.py rqworker
+
+python manage.py rqworker --worker-class rq_win.WindowsWorker default
