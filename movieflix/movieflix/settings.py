@@ -29,6 +29,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['.localhost', '127.0.0.1', '[::1]']
 
 AUTH_USER_MODEL = 'user.CustomUser'
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    'user.backends.EmailBackend'
+)
 
 # Application definition
 
