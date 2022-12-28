@@ -14,7 +14,11 @@ def convert480p(source):
     destination_path = ext + '_480p.mp4'
     new_path = source.split('\x5c')[-1]
     new_path2 = new_path.split('.')[0] + '_480p.mp4'
-    print(final_path + new_path2)
+    source_path = final_path + ext
     
-    cmd = 'ffmpeg -i "{}" -s hd720 -c:v libx264 -crf 23 -c:a aac -strict -2 "{}"'.format(final_path, final_path + new_path2)    
-    run = subprocess.run(cmd, capture_output=True)
+    test = r"C:\dev\backend\Neuer Ordner\Movieflix-Backend\movieflix\media\movie\Ozean135658.mp4"
+    test2 = r"C:\dev\backend\Neuer Ordner\Movieflix-Backend\movieflix\media\movie\Ozean135658_480p.mp4"
+    print(test)
+    print(test2)
+    cmd = 'ffmpeg -i "{}" -s hd720 -c:v libx264 -crf 23 -c:a aac -strict -2 "{}"'.format(test, test2)    
+    subprocess.run(cmd, capture_output=True)
