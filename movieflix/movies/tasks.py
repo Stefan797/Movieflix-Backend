@@ -17,4 +17,4 @@ def convert480p(source):
     print(final_path + new_path2)
     
     cmd = 'ffmpeg -i "{}" -s hd720 -c:v libx264 -crf 23 -c:a aac -strict -2 "{}"'.format(final_path, final_path + new_path2)    
-    run = subprocess.run(cmd, capture_output=True)
+    subprocess.run(cmd, capture_output=True)
