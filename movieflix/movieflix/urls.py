@@ -19,12 +19,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 from user.views import CustomUserViewSet
-from movies.views import RangeFileWrapper
+from movies.views import MovieViewSet
 
 
 router = routers.DefaultRouter()
 router.register(r'userAPI', CustomUserViewSet)
-router.register(r'movieAPI', RangeFileWrapper)
+router.register(r'movieAPI', MovieViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
