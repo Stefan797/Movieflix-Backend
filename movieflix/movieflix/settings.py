@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-CACHE_TTL = 60 * 15
+CACHE_TTL = 900
 
 INTERNAL_IPS = [
     '127.0.0.1',

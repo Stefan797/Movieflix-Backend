@@ -36,6 +36,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
     path('django-rq/', include('django_rq.urls')),
-    path('movieST/<int:pk>/', views.show_movie)
+    path('movieST/<str:title>/', views.show_movie)
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 

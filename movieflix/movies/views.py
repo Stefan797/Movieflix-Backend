@@ -10,7 +10,7 @@ from django.http import HttpResponse
 
 
 
-CACHE_TTL = getattr(settings, 'CACHETTL', DEFAULT_TIMEOUT)
+CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
 
 
@@ -19,10 +19,9 @@ class MovieViewSet(viewsets.ModelViewSet):
     serializer_class = MovieSerializer
 
 @cache_page(CACHE_TTL)
-def show_movie(request, pk):
+def show_movie(request, title):
     if request.method == "GET":
-        movie = Movie.objects.get(pk=pk)
-        
+        movie = Movie.objects.get(title=title)
         test = movie.movie_file.path
         print(test)
         file = FileWrapper(open(test, 'rb'))
