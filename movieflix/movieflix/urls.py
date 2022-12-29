@@ -23,8 +23,7 @@ from movies.views import MovieViewSet
 from rest_framework.urlpatterns import format_suffix_patterns
 from movies import views
 
-
-
+from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 
 router = routers.DefaultRouter()
 router.register(r'userAPI', CustomUserViewSet)
@@ -34,8 +33,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls')),
+    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
     path('__debug__/', include('debug_toolbar.urls')),
     path('django-rq/', include('django_rq.urls')),
-    path('movieST/<str:title>/', views.show_movie)
+    path('movieST/<str:title>/', views.show_movie),
+    # path('login/', views.login),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
