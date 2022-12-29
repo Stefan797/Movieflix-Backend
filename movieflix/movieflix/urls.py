@@ -14,16 +14,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path, reverse_lazy
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 from user.views import CustomUserViewSet
 from movies.views import MovieViewSet
 from rest_framework.urlpatterns import format_suffix_patterns
-from movies import views
-
+from movies.views import show_movie
+from user.views import UserLogIn
 from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
+from django.views.generic.base import RedirectView
 
 router = routers.DefaultRouter()
 router.register(r'userAPI', CustomUserViewSet)
@@ -36,7 +37,10 @@ urlpatterns = [
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
     path('__debug__/', include('debug_toolbar.urls')),
     path('django-rq/', include('django_rq.urls')),
-    path('movieST/<str:title>/', views.show_movie),
+    path('movieST/<str:title>/', show_movie),
+    path('api-user-login/', UserLogIn.as_view()),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
     # path('login/', views.login),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
