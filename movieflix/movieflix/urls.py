@@ -20,6 +20,10 @@ from django.conf.urls.static import static
 from rest_framework import routers
 from user.views import CustomUserViewSet
 from movies.views import MovieViewSet
+from rest_framework.urlpatterns import format_suffix_patterns
+from movies import views
+
+
 
 
 router = routers.DefaultRouter()
@@ -32,5 +36,6 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
     path('django-rq/', include('django_rq.urls')),
+    path('movieST/<int:pk>/', views.show_movie)
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 

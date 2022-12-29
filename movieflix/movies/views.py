@@ -5,19 +5,38 @@ from django.conf import settings
 from rest_framework import viewsets
 from .models import Movie
 from .serializers import MovieSerializer
-
-class MovieViewSet(viewsets.ModelViewSet):
-    queryset = Movie.objects.all().order_by('-id')
-    serializer_class = MovieSerializer
+from wsgiref.util import FileWrapper
+from django.http import HttpResponse
 
 
 
 CACHE_TTL = getattr(settings, 'CACHETTL', DEFAULT_TIMEOUT)
 
 
+
+class MovieViewSet(viewsets.ModelViewSet):
+    queryset = Movie.objects.all().order_by('-id')
+    serializer_class = MovieSerializer
+
 @cache_page(CACHE_TTL)
-def show_movie(request):
-    print('Movie X is streaming') 
+def show_movie(request, pk):
+    if request.method == "GET":
+        movie = Movie.objects.get(pk=pk)
+        
+        test = movie.movie_file.path
+        print(test)
+        file = FileWrapper(open(test, 'rb'))
+        response = HttpResponse(file, content_type='video/mp4')
+        dynamic_response = 'attachment; filename=' + test
+        response['Content-Disposition'] = dynamic_response
+    return response
+    
+
+
+
+
+    
+     
 
 
 
