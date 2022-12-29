@@ -1,4 +1,4 @@
-from movies.tasks import convert480p
+from movies.tasks import convert_720p, convert_480p
 from .models import Movie
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -11,6 +11,7 @@ def movie_post_save(sender, instance, created, **kwargs):
     if created: 
         print('New object created')
         queue = django_rq.get_queue('default', autocommit=True)
-        queue.enqueue(convert480p, instance.movie_file.path)
+        queue.enqueue(convert_720p, instance.movie_file.path)
+        queue.enqueue(convert_480p, instance.movie_file.path)
         # convert480p(instance.movie_file.path)
         # convert_720p(instance.video_file.path)
