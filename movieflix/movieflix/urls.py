@@ -33,7 +33,7 @@ router.register(r'movieAPI', MovieViewSet)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls')),
+   
     path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
     path('__debug__/', include('debug_toolbar.urls')),
     path('django-rq/', include('django_rq.urls')),
@@ -44,3 +44,4 @@ urlpatterns = [
     # path('login/', views.login),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
+ # path('api-auth/', include('rest_framework.urls')),
