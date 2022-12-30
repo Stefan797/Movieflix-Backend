@@ -30,10 +30,11 @@ class CustomAccountManager(BaseUserManager):
             first_name=first_name, **other_fields)
         user.set_password(password)
         user.save()
+        # email versenden
         return user
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):    
-        date_joined         = models.DateTimeField(default=timezone.now) #verbose_name="date joined",
+        date_joined         = models.DateTimeField(default=timezone.now) 
         is_admin            = models.BooleanField(default=False)
         is_active           = models.BooleanField(default=False)
         is_staff            = models.BooleanField(default=False)
@@ -42,7 +43,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         last_name           = models.CharField(max_length=50)
         password            = models.CharField(max_length=999)
         email               = models.EmailField(_('email address'), unique=True)
-        username           = models.CharField(max_length=300, unique=True, default='email')
+        username            = models.CharField(max_length=300, unique=True, default='email')
 
         objects = CustomAccountManager()
 
@@ -53,17 +54,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             return self.username
 
 
-#last_login = models.DateTimeField(default=timezone.now) #verbose_name="last login", 
 
- #   USERNAME_FIELD = 'email'
- #   REQUIRED_FIELDS= ['username']
-
- #   def __str__(self):
- #   return self.username
-
-
-#login #forgotpw 
-
-"""   profile_image       = models.ImageField() # rnd bild generieren? oder aus einer auswahl auswählen lassen? """
 
 #pip install markdown       # Markdown support for the browsable API. vllt noch anschauen?

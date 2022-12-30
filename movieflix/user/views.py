@@ -10,7 +10,9 @@ from rest_framework.authtoken.models import Token #
 from rest_framework.permissions import IsAuthenticated  # <-- Here
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-
+from .models import CustomUser
+from django.conf import settings
+from django.core.mail import send_mail
 
 # Create your views here.
 
@@ -19,20 +21,40 @@ class CustomUserViewSet(viewsets.ModelViewSet):
     # permission_classes = (IsAuthenticated,)             # <-- And here
     queryset = CustomUser.objects.all().order_by('-id')
     serializer_class = CustomUserSerializer
-
+    permission_classes = [IsAuthenticated]
 
 class UserLogIn(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
         serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['CustomUserSerializer']
+        user = serializer.validated_data['user']
         token = Token.objects.get(user=user)
         return Response({
             'token': token.key,
             'id': user.pk,
             'user_name': user.username
         })
+
+class SignUp(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token = Token.objects.create(user=user)
+        subject = 'welcome to Movieflix'
+        message = f'Hi {user.username}, thank you for registering in geeksforgeeks.'
+        email_from = settings.EMAIL_HOST_USER
+        recipient_list = [user.email, 'regener.jonas@gmail.com']
+        return send_mail( subject, message, email_from, recipient_list, token )
+
+# der token muss jetzt per email zur password vergabe versendet werden.
+
+        
+
+
+# User Login müsste zum Sign um umgeschrieben werden. Beim Sign up den Token per Email versenden und mit diesem das password vergeben.
 
 """ 
 
