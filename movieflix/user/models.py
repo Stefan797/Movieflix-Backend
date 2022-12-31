@@ -30,7 +30,7 @@ class CustomAccountManager(BaseUserManager):
             first_name=first_name, **other_fields)
         user.set_password(password)
         user.save()
-        # email versenden
+        
         return user
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):    
@@ -39,11 +39,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         is_active           = models.BooleanField(default=False)
         is_staff            = models.BooleanField(default=False)
         is_superuser        = models.BooleanField(default=False)
-        first_name          = models.CharField(max_length=50)
-        last_name           = models.CharField(max_length=50)
-        password            = models.CharField(max_length=999)
-        email               = models.EmailField(_('email address'), unique=True)
-        username            = models.CharField(max_length=300, unique=True, default='email')
+        first_name          = models.CharField(max_length=50, null=True)
+        last_name           = models.CharField(max_length=50, null=True)
+        password            = models.CharField(max_length=999, null=True)
+        email               = models.EmailField(_('email address'), unique=True, null=True)
+        username            = models.CharField(max_length=300, unique=True, default=None, null=True)
 
         objects = CustomAccountManager()
 

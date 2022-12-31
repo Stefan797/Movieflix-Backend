@@ -14,3 +14,8 @@ ____ Using rqworker _____
 python manage.py rqworker
 
 python manage.py rqworker --worker-class rq_win.WindowsWorker default
+
+
+
+
+
