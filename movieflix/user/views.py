@@ -1,5 +1,5 @@
-from django.shortcuts import render
-from django.contrib.auth.models import User
+#from django.shortcuts import render
+#from django.contrib.auth.models import User
 from rest_framework import viewsets, status
 from .models import CustomUser
 from django.core import serializers
