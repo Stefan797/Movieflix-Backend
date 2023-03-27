@@ -16,13 +16,11 @@ from django.core.mail import send_mail
 
 # Create your views here.
 
-
 class CustomUserViewSet(viewsets.ModelViewSet):
     # permission_classes = (IsAuthenticated,)             # <-- And here
     queryset = CustomUser.objects.all().order_by('-id')
     serializer_class = CustomUserSerializer
     
-
 class UserLogIn(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
@@ -57,45 +55,4 @@ class SignUp(ObtainAuthToken):
             send_mail( subject, message, email_from, recipient_list, token )
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-"""         serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
-        
-        serializer.is_valid(raise_exception=True)                                 
-        user = serializer.validated_data['user']
-        token = Token.objects.create(user=user)
-        subject = 'welcome to Movieflix'
-        message = f'Hi {user.username}, thank you for registering in Movieflix.'
-        email_from = settings.EMAIL_HOST_USER
-        recipient_list = [user.email]
-        send_mail( subject, message, email_from, recipient_list, token.key )
-        return Response(serializer.data, status=status.HTTP_201_CREATED) """
-        
-
-
-
-
-        
-
- 
-
-        
-# der token muss jetzt per email zur password vergabe versendet werden.
-
-        
-
-
-# User Login müsste zum Sign um umgeschrieben werden. Beim Sign up den Token per Email versenden und mit diesem das password vergeben.
-
-""" 
-
-def login(request):
-    user_name = request.get('user_name')
-    password = request.get('password')
-    token = Token.objects.create(user=...)#
-    print(token.key)#
-    return """
-
-
-
-# date_joined mit aktuellem datum versehen
 

@@ -12,3 +12,5 @@ ___
 python manage.py rqworker 
 python manage.py rqworker --worker-class rq_win.WindowsWorker default
 ___
+
+git philosophie feature/email verification 
