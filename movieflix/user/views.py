@@ -20,6 +20,7 @@ import datetime
 
 def logout_view(request):
     logout(request)
+    return HttpResponse(status=204)
     # Redirect to a success page.
 
 class CustomUserViewSet(viewsets.ModelViewSet):
