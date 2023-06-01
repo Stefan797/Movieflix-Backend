@@ -22,7 +22,7 @@ from user.views import CustomUserViewSet
 from movies.views import MovieViewSet
 from rest_framework.urlpatterns import format_suffix_patterns
 from movies.views import show_movie
-from user.views import UserLogIn, SignUp
+from user.views import UserLogIn, SignUp, logout_view
 from rest_framework.authtoken.views import obtain_auth_token  # <-- Here
 from django.views.generic.base import RedirectView
 
@@ -42,7 +42,7 @@ urlpatterns = [
     path('sign-up/', SignUp.as_view()),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     re_path(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
-    # path('login/', views.login),
+    path('logout/', logout_view),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
 
  # path('api-auth/', include('rest_framework.urls')),

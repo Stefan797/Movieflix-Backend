@@ -13,8 +13,14 @@ from rest_framework.response import Response
 from .models import CustomUser
 from django.conf import settings
 from django.core.mail import send_mail
+from django.contrib.auth import logout
+import datetime
 
 # Create your views here.
+
+def logout_view(request):
+    logout(request)
+    # Redirect to a success page.
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     # permission_classes = (IsAuthenticated,)             # <-- And here
@@ -44,7 +50,8 @@ class SignUp(ObtainAuthToken):
             email = request.POST.get('email'),
             password = request.POST.get('password'),
             )
-        print(serializer)
+        now = datetime.datetime.now()
+        print(serializer, now)
         if serializer.is_valid():
             serializer.save()
             token = Token.objects.get(user=user)
