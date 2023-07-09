@@ -5,6 +5,9 @@ forms.py am Ende für CustumUser - Video 15  Custom Admin Forms
 
 ____ Using rqworker _____
 
+
+Aktuell --> rqworker -w rq_win.WindowsWorker
+
 rqworker | nur um den Redis Worker zu starten
 
 Nochmal lesen
