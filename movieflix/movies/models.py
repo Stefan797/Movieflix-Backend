@@ -2,6 +2,20 @@ from django.db import models
 from datetime import date
 import os
 # Create your models here.
+
+Category_one = "keepwatching"
+Category_two = "popularatpresent"
+Category_three = "watchagain"
+Category_four = "mylist"
+Category_five = "any"
+
+CATEGORY_CHOICES = (
+    (Category_one, "keepwatching"),
+    (Category_two, "popularatpresent"),
+    (Category_three, "watchagain"),
+    (Category_four, "mylist"),
+    (Category_five, "any"),
+)
     
 
 class Movie(models.Model):
@@ -9,7 +23,8 @@ class Movie(models.Model):
     title = models.CharField(max_length=80)
     description = models.CharField(max_length=500)
     movie_file = models.FileField(upload_to='movie', blank=True, null=True)
-    category = models.CharField(max_length=80, blank=True, null=True)
+    #category = models.CharField(max_length=80, blank=True, null=True)
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="any")
 
 
     def filename(self):

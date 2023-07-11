@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'debug_toolbar',
     'django_rq',
+    'notifications'
 ]
 
 MIDDLEWARE = [

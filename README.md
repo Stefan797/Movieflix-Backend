@@ -25,3 +25,13 @@ git philosophie feature/email verification
     - ACtivateenv with: ```source env/bin/activate```
     - In ```settings.py``` define ```STATIC_ROOT```
     - Run ```python manage,py collectstatic```
+
+
+__________________
+
+Email Bestätigung via google mail machen 
+Link in er Mail als Url endpoint auf def(in der views.py) activateModel isactive Field durch die funktion ändern()
+
+
+
+____________________________

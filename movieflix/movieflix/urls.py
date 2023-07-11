@@ -18,6 +18,7 @@ from django.urls import path, include, re_path, reverse_lazy
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
+from notifications.views import NotificationItemView
 from user.views import CustomUserViewSet
 from movies.views import MovieViewSet
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -34,9 +35,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)), 
    
-    path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
+    path('notifications/', NotificationItemView.as_view()),
+    #path('api-token-auth/', obtain_auth_token, name='api_token_auth'),  # <-- And here
     path('__debug__/', include('debug_toolbar.urls')),
     path('django-rq/', include('django_rq.urls')),
+    # path('movies/', MovieViewSet.as_view()),
     path('movieST/<str:title>/', show_movie),
     path('api/', include(router.urls)),
     path('api-user-login/', CreateTokenView.as_view(), name="token"),
