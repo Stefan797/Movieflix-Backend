@@ -1,3 +1,6 @@
+from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+
 from rest_framework import viewsets, status
 from .models import CustomUser
 # from django.core import serializers
@@ -16,6 +19,9 @@ from django.contrib.auth import logout
 from .serializers import AuthTokenSerializer
 from rest_framework.settings import api_settings
 from django.contrib.auth.hashers import make_password
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 
@@ -54,6 +60,13 @@ class CreateTokenView(ObtainAuthToken):
     #         'message': 'You registered successfully.',
     #     }
     #     return Response(response_data, status=status.HTTP_201_CREATED)
+
+class EmailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        email = request.user.email
+        return Response({'email': email})
 
 
 class SignUp(ObtainAuthToken): 

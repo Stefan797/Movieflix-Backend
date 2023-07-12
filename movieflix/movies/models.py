@@ -20,14 +20,15 @@ CATEGORY_CHOICES = (
 
 class Movie(models.Model):
     created_at = models.DateField(default=date.today)
+    moviename = models.CharField(max_length=80, blank=True, null=True)
     title = models.CharField(max_length=80)
     description = models.CharField(max_length=500)
     movie_file = models.FileField(upload_to='movie', blank=True, null=True)
     #category = models.CharField(max_length=80, blank=True, null=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="any")
 
-
     def filename(self):
         return os.path.basename(self.movie_file.name)
-    # def __str__(self):
-    #     return self.title
+    
+    def __str__(self):
+        return f"{self.title} - {self.created_at}"
