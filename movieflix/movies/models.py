@@ -24,6 +24,7 @@ class Movie(models.Model):
     title = models.CharField(max_length=80)
     description = models.CharField(max_length=500)
     movie_file = models.FileField(upload_to='movie', blank=True, null=True)
+    # screenshot = models.ImageField(upload_to='screenshots/', blank=True)
     #category = models.CharField(max_length=80, blank=True, null=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="any")
 

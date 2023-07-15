@@ -66,7 +66,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         last_name = models.CharField(max_length=50, null=True)
         password = models.CharField(max_length=999, null=True)
         email= models.EmailField(_('email address'), unique=True, null=True)
-        username = models.CharField(max_length=300, unique=True, default=None, null=True)
+        username = models.CharField(max_length=300, unique=True)
 
         objects = UserManager()
 
@@ -74,4 +74,4 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         # REQUIRED_FIELDS = ['username', 'first_name']
 
         def __str__(self):
-            return self.username
+            return self.username or self.email or self.first_name or self.last_name
