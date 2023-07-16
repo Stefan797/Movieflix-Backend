@@ -4,9 +4,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 from notifications.views import NotificationItemView
-from user.views import CustomUserViewSet, EmailView, SignUp, CreateTokenView, logout_view
-from movies.views import MovieViewSet, show_movie
+from user.views import CustomUserViewSet, EmailView, SignUp, CreateTokenView, logout_view, activate_user
+from movies.views import MovieViewSet, show_movie, upload_movie
 from django.views.generic.base import RedirectView
+
 
 router = routers.DefaultRouter()
 router.register(r'userAPI', CustomUserViewSet)
@@ -18,8 +19,9 @@ urlpatterns = [
     path('notifications/', NotificationItemView.as_view()),
     path('__debug__/', include('debug_toolbar.urls')),
     path('django-rq/', include('django_rq.urls')),
-    # path('movies/', MovieViewSet.as_view()),
+    path(' upload_movie/',  upload_movie),
     path('movieST/<str:title>/', show_movie),
+    path('activate/<int:user_id>/', activate_user, name='activate_user'),
     path('useremail/', EmailView.as_view()),
     path('api/', include(router.urls)),
     path('api-user-login/', CreateTokenView.as_view(), name="token"),

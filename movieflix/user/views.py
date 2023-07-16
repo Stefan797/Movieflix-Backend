@@ -22,6 +22,7 @@ from django.contrib.auth.hashers import make_password
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -40,26 +41,6 @@ class CreateTokenView(ObtainAuthToken):
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
-    # 
-
-    # def post(self, request, *args, **kwargs):
-    #     """
-    #     To login a new user, we need to validate request data, 
-    #     if not valid return bad request, else create user from valid request data, 
-    #     send registration successful email to new user and response created.
-    #     """
-    #     serializer = CustomUserSerializer(data=request.data)
-    #     if not serializer.is_valid():
-    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-    #     user = create_user_from_request_data(request.data)
-    #     # send_register_mail_to_newuser(user)
-    #     response_data = {
-    #         'username': user.username,
-    #         'email': user.email,
-    #         'message': 'You registered successfully.',
-    #     }
-    #     return Response(response_data, status=status.HTTP_201_CREATED)
 
 class EmailView(APIView):
     permission_classes = [IsAuthenticated]
@@ -67,6 +48,12 @@ class EmailView(APIView):
     def get(self, request):
         email = request.user.email
         return Response({'email': email})
+    
+def activate_user(request, user_id):
+    user = get_object_or_404(CustomUser, pk=user_id)
+    user.is_active = True
+    user.save()
+    return JsonResponse({'message': 'User activated successfully.'})
 
 
 class SignUp(ObtainAuthToken): 
@@ -85,6 +72,7 @@ class SignUp(ObtainAuthToken):
         response_data = {
             'username': user.username,
             'email': user.email,
+            'user_id': user.pk,
             'message': 'You registered successfully.',
         }
         return Response(response_data, status=status.HTTP_201_CREATED)

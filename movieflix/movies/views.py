@@ -1,5 +1,5 @@
-# import ffmpeg
-# from django.shortcuts import render, redirect
+import ffmpeg
+from django.shortcuts import render, redirect
 from django.core.cache.backends.base import DEFAULT_TIMEOUT 
 from django.views.decorators.cache import cache_page 
 from django.conf import settings
@@ -35,26 +35,26 @@ def show_movie(request, title):
         response['Content-Disposition'] = dynamic_response
     return response
 
-# def upload_movie(request):
-#     if request.method == 'POST':
-#         movie_file = request.FILES['video']
-#         movie = Movie.objects.create(movie_file=movie_file)
+def upload_movie(request):
+    if request.method == 'POST':
+        movie_file = request.FILES['video']
+        movie = Movie.objects.create(movie_file=movie_file)
 
-#         # Pfad zum hochgeladenen Video
-#         movie_path = movie.movie_file.path
+        # Pfad zum hochgeladenen Video
+        movie_path = movie.movie_file.path
 
-#         # Pfad für den Screenshot
-#         screenshot_path = f'screenshots/{movie.pk}.jpg'
+        # Pfad für den Screenshot
+        screenshot_path = f'screenshots/{movie.pk}.jpg'
 
-#         # Screenshot erstellen
-#         ffmpeg.input(movie_path).filter('thumbnail', t='10').output(screenshot_path, vframes=1)
-#         movie.screenshot = screenshot_path
-#         movie.save()
+        # Screenshot erstellen
+        ffmpeg.input(movie_path).filter('thumbnail', t='10').output(screenshot_path, vframes=1)
+        movie.screenshot = screenshot_path
+        movie.save()
 
-#         return redirect('movie_detail', pk=movie.pk)
+        return redirect('movie_detail', pk=movie.pk)
 
-#     return render(request, 'upload_video.html')
+    return render(request, 'upload_video.html')
 
-# def movie_detail(request, pk):
-#     movie = Movie.objects.get(pk=pk)
-#     return render(request, 'video_detail.html', {'video': movie})
+def movie_detail(request, pk):
+    movie = Movie.objects.get(pk=pk)
+    return render(request, 'video_detail.html', {'video': movie})
