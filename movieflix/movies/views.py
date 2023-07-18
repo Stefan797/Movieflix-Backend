@@ -8,6 +8,8 @@ from .models import Movie
 from .serializers import MovieSerializer
 from wsgiref.util import FileWrapper
 from django.http import HttpResponse
+from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -22,6 +24,11 @@ class MovieViewSet(viewsets.ModelViewSet):
         if category is not None:
             self.queryset = Movie.objects.filter(category=category)
         return self.queryset
+    
+    def load_movie(self, request, pk=None):
+        movie = self.get_object()
+        serializer = self.get_serializer(movie)
+        return Response(serializer.data)
 
 @cache_page(CACHE_TTL)
 def show_movie(request, title):
@@ -35,6 +42,7 @@ def show_movie(request, title):
         response['Content-Disposition'] = dynamic_response
     return response
 
+@csrf_exempt
 def upload_movie(request):
     if request.method == 'POST':
         movie_file = request.FILES['video']
@@ -51,7 +59,7 @@ def upload_movie(request):
         movie.screenshot = screenshot_path
         movie.save()
 
-        return redirect('movie_detail', pk=movie.pk)
+        # return redirect('movie_detail', pk=movie.pk)
 
     return render(request, 'upload_video.html')
 
