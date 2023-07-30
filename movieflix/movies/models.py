@@ -27,9 +27,10 @@ class Movie(models.Model):
     screenshot = models.ImageField(upload_to='screenshots/', blank=True, null=True)
     #category = models.CharField(max_length=80, blank=True, null=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="any")
+    category_german = models.CharField(max_length=80, blank=True, null=True)
 
     def filename(self):
         return os.path.basename(self.movie_file.name)
     
     def __str__(self):
-        return f"{self.title} - {self.created_at}"
+        return f"({self.id}) {self.title}" # - {self.created_at}

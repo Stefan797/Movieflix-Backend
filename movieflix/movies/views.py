@@ -1,5 +1,6 @@
 import ffmpeg
-from django.shortcuts import render, redirect
+import subprocess
+# from django.shortcuts import render, redirect
 from django.core.cache.backends.base import DEFAULT_TIMEOUT 
 from django.views.decorators.cache import cache_page 
 from django.conf import settings
@@ -10,6 +11,7 @@ from wsgiref.util import FileWrapper
 from django.http import HttpResponse
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
+import os
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -42,27 +44,32 @@ def show_movie(request, title):
         response['Content-Disposition'] = dynamic_response
     return response
 
+
 @csrf_exempt
 def upload_movie(request):
     if request.method == 'POST':
-        movie_file = request.FILES['video']
-        movie = Movie.objects.create(movie_file=movie_file)
+        movie_request = request.FILES['movie']
+        movie = Movie.objects.create(movie_file=movie_request)
 
-        # Pfad zum hochgeladenen Video
+        movie_name = request.POST['title']
+        movie.title = movie_name
+
+        # Create the "screenshots" directory if it doesn't exist
+        screenshot_dir = os.path.join('screenshots')
+        os.makedirs(screenshot_dir, exist_ok=True)
+
+        # Generate a valid screenshot filename with a number pattern
+        screenshot_filename = os.path.splitext(os.path.basename(movie.movie_file.name))[0] + '_%d.png'
+        screenshot_path = os.path.join(screenshot_dir, screenshot_filename)
+
+        # Path to the uploaded video
         movie_path = movie.movie_file.path
 
-        # Pfad für den Screenshot
-        screenshot_path = f'screenshots/{movie.pk}.jpg'
-
-        # Screenshot erstellen
-        ffmpeg.input(movie_path).filter('thumbnail', t='10').output(screenshot_path, vframes=1)
-        movie.screenshot = screenshot_path
-        movie.save()
-
-        # return redirect('movie_detail', pk=movie.pk)
-
-    return render(request, 'upload_video.html')
-
-def movie_detail(request, pk):
-    movie = Movie.objects.get(pk=pk)
-    return render(request, 'video_detail.html', {'video': movie})
+        # Create the screenshot
+        try:
+            subprocess.run(['ffmpeg', '-i', movie_path, '-vf', 'thumbnail', '-vframes', '1', screenshot_path], check=True)
+            movie.screenshot = screenshot_filename  # Save the screenshot filename in the database
+            movie.save()
+            return HttpResponse({'moviefile': movie.movie_file})
+        except subprocess.CalledProcessError as e:
+            return HttpResponse(f'Fehler bei der Erstellung des Screenshots: {e.stderr}')
