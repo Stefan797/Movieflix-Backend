@@ -19,6 +19,8 @@ urlpatterns = [
     path('notifications/', NotificationItemView.as_view()),
     path('__debug__/', include('debug_toolbar.urls')),
     path('django-rq/', include('django_rq.urls')),
+    path('movies/<int:pk>/change-category/', MovieViewSet.change_category_to_mylist, name='change-category-to-mylist'),
+    path('movies/<int:pk>/increase_likes/', MovieViewSet.increase_likes, name='increase-likes'),
     path('movie/<int:pk>/load_movie/', MovieViewSet.as_view({'get': 'load_movie'}), name='load_movie'),
     path('upload_movie/',  upload_movie),
     path('movieST/<str:title>/', show_movie),

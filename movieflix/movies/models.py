@@ -41,6 +41,7 @@ class Movie(models.Model):
     movie_time = models.CharField(max_length=80, blank=True, null=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default="any")
     category_german = models.CharField(max_length=80, blank=True, null=True)
+    likes = models.IntegerField(default=0, blank=True, null=True)
 
     def filename(self):
         return os.path.basename(self.movie_file.name)

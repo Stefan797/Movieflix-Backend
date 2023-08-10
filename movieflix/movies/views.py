@@ -12,6 +12,7 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 import os
+from rest_framework.decorators import action # api_view, permission_classes
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -31,6 +32,49 @@ class MovieViewSet(viewsets.ModelViewSet):
         movie = self.get_object()
         serializer = self.get_serializer(movie)
         return Response(serializer.data)
+    
+    @action(detail=False, methods=['get'])
+    def search_movies(self, request):
+        search_terms = request.query_params.get('search_terms')
+        title = request.query_params.get('title')
+        category = request.query_params.get('category')
+
+        # Start mit dem kompletten Queryset
+        queryset = Movie.objects.all()
+
+        # Wenn search_terms angegeben sind, filtere nach Suchbegriffen
+        if search_terms:
+            queryset = queryset.filter(Q(search_terms__icontains=search_terms))
+
+        # Wenn title angegeben ist, filtere nach Titel
+        if title:
+            queryset = queryset.filter(Q(title__icontains=title))
+
+        # Wenn category angegeben ist, filtere nach Kategorie
+        if category:
+            queryset = queryset.filter(Q(category=category))
+
+        serializer = MovieSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    @action(detail=True, methods=['post'])
+    def increase_likes(self, request, pk=None):
+        movie = self.get_object()
+        movie.likes += 1
+        movie.save()
+        return Response({'likes': movie.likes})
+    
+    # @api_view(['POST'])
+    # @permission_classes([permissions.IsAuthenticated])
+    def change_category_to_mylist(request, pk):
+        try:
+            movie = Movie.objects.get(pk=pk)
+        except Movie.DoesNotExist:
+            return Response(status=404)
+
+        movie.category = 'mylist'
+        movie.save()
+        return Response({'message': 'Category changed to mylist'})
 
 @cache_page(CACHE_TTL)
 def show_movie(request, title):
