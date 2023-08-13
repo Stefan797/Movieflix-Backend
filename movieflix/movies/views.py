@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 import os
 from rest_framework.decorators import action # api_view, permission_classes
+from django.db.models import Q
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -22,16 +23,45 @@ class MovieViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        
         category = self.request.query_params.get('category')
+        special_category_mylist = self.request.query_params.get('special_category_mylist')
+        #print('z26', category)
+        
         if category is not None:
             self.queryset = Movie.objects.filter(category=category)
+            # print('z30', self.queryset)
+
+        if special_category_mylist is not None:
+            self.queryset = Movie.objects.filter(special_category_mylist=special_category_mylist)
+            # print('z35', self.queryset)
         return self.queryset
+
     
     def load_movie(self, request, pk=None):
         movie = self.get_object()
         serializer = self.get_serializer(movie)
         return Response(serializer.data)
+    
+    # @action(detail=True, methods=['get'])
+    def increase_likes(self, request, pk=None):
+        movie = self.get_object()
+        print(movie)
+        movie.likes += 1
+        movie.save()
+        print(movie)
+        return Response({'likes': movie.likes})
+    
+    # @api_view(['POST'])
+    # @permission_classes([permissions.IsAuthenticated])
+    def change_category_to_mylist(self, request, pk=None):
+        # try:
+        #     movie = Movie.objects.get(pk=pk)
+        # except Movie.DoesNotExist:
+        #     return Response(status=404)
+        movie = self.get_object()
+        movie.special_category_mylist = 'mylist'
+        movie.save()
+        return Response({'message': 'Category changed to mylist'})
     
     @action(detail=False, methods=['get'])
     def search_movies(self, request):
@@ -57,24 +87,9 @@ class MovieViewSet(viewsets.ModelViewSet):
         serializer = MovieSerializer(queryset, many=True)
         return Response(serializer.data)
     
-    @action(detail=True, methods=['post'])
-    def increase_likes(self, request, pk=None):
-        movie = self.get_object()
-        movie.likes += 1
-        movie.save()
-        return Response({'likes': movie.likes})
     
-    # @api_view(['POST'])
-    # @permission_classes([permissions.IsAuthenticated])
-    def change_category_to_mylist(request, pk):
-        try:
-            movie = Movie.objects.get(pk=pk)
-        except Movie.DoesNotExist:
-            return Response(status=404)
-
-        movie.category = 'mylist'
-        movie.save()
-        return Response({'message': 'Category changed to mylist'})
+    
+    
 
 @cache_page(CACHE_TTL)
 def show_movie(request, title):
