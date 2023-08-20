@@ -4,8 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import routers
 from notifications.views import NotificationItemView
-from user.views import CustomUserViewSet, EmailView, SignUp, CreateTokenView, logout_view, activate_user
-from movies.views import MovieViewSet, show_movie, upload_movie
+from user.views import CustomUserViewSet, SignUp, CreateTokenView, logout_view, activate_user
+from movies.views import MovieViewSet, upload_movie
 from django.views.generic.base import RedirectView
 
 
@@ -23,9 +23,8 @@ urlpatterns = [
     path('movie/<int:pk>/increase_likes/', MovieViewSet.as_view({'get': 'increase_likes'}), name='increase-likes'),
     path('movie/<int:pk>/load_movie/', MovieViewSet.as_view({'get': 'load_movie'}), name='load_movie'),
     path('upload_movie/',  upload_movie),
-    path('movieST/<str:title>/', show_movie),
     path('activate/<int:user_id>/', activate_user, name='activate_user'),
-    path('useremail/', EmailView.as_view()),
+    # path('user/<int:pk>/userbasic/', CustomUserViewSet.as_view({'get': 'get_user_basics'}), name='get-user-basics'),
     path('api/', include(router.urls)),
     path('api-user-login/', CreateTokenView.as_view(), name="token"),
     path('sign-up/', SignUp.as_view()),

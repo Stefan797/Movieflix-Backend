@@ -31,9 +31,21 @@ def logout_view(request):
     return HttpResponse(status=204)
     # Redirect to a success page.
 
+
 class CustomUserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all().order_by('-id')
     serializer_class = CustomUserSerializer
+    queryset = CustomUser.objects.all().order_by('-id')
+
+    # def get_user_basics(self, request, pk=None):
+    #     user = self.get_object()
+    #     response_data = {
+    #         'username': user.username,
+    #         'email': user.email,
+    #         'user_id': user.pk,
+    #         'message': 'You get correct User.', 
+    #     }
+    #     return Response(response_data, status=status.HTTP_200_OK)
+
     
 
 class CreateTokenView(ObtainAuthToken):
@@ -41,14 +53,7 @@ class CreateTokenView(ObtainAuthToken):
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
-
-class EmailView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        email = request.user.email
-        return Response({'email': email})
-    
+ 
 def activate_user(request, user_id):
     user = get_object_or_404(CustomUser, pk=user_id)
     user.is_active = True

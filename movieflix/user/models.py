@@ -3,6 +3,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, BaseUserManager
 
+from movies.models import Movie
+
 class CustomAccountManager(BaseUserManager):
 
     def create_superuser(self, email, username, first_name, password, **other_fields):
@@ -67,6 +69,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         password = models.CharField(max_length=999, null=True)
         email= models.EmailField(_('email address'), unique=True, null=True)
         username = models.CharField(max_length=300, unique=True, null=True)
+        favorite_movies = models.ManyToManyField(Movie, related_name='favorited_by_user', blank=True)
+        liked_movies = models.ManyToManyField(Movie, related_name='liked_by_user', blank=True)
 
         objects = UserManager()
 
