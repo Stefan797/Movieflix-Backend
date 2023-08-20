@@ -59,13 +59,13 @@ class MovieViewSet(viewsets.ModelViewSet):
             currentuser.liked_movies.add(movie)
             movie.likes += 1
             movie.save()
-            response_data = {'movieLikes': movie.likes,'movieLikeStatus': True}
+            response_data = {'movieLikes': movie.likes}
             print(currentuser.liked_movies)
         else: 
             currentuser.liked_movies.remove(movie)
             movie.likes -= 1
             movie.save()
-            response_data = {'movieLikes': movie.likes,'movieLikeStatus': False}
+            response_data = {'movieLikes': movie.likes}
         
         return Response(response_data, status=status.HTTP_200_OK)
     
