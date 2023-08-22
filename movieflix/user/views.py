@@ -1,27 +1,13 @@
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
-
-from rest_framework import viewsets, status
 from .models import CustomUser
-# from django.core import serializers
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponse
+from rest_framework import viewsets, status
 from .serializers import CustomUserSerializer
-# from rest_framework.authentication import TokenAuthentication 
-# from rest_framework.authtoken.models import Token
-# from rest_framework.permissions import IsAuthenticated  
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-from .models import CustomUser
-from django.conf import settings
-from django.core.mail import send_mail
 from django.contrib.auth import logout
-# import datetime
 from .serializers import AuthTokenSerializer
 from rest_framework.settings import api_settings
 from django.contrib.auth.hashers import make_password
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
 # Create your views here.
@@ -29,37 +15,21 @@ from django.shortcuts import get_object_or_404
 def logout_view(request):
     logout(request)
     return HttpResponse(status=204)
-    # Redirect to a success page.
-
 
 class CustomUserViewSet(viewsets.ModelViewSet):
     serializer_class = CustomUserSerializer
     queryset = CustomUser.objects.all().order_by('-id')
-
-    # def get_user_basics(self, request, pk=None):
-    #     user = self.get_object()
-    #     response_data = {
-    #         'username': user.username,
-    #         'email': user.email,
-    #         'user_id': user.pk,
-    #         'message': 'You get correct User.', 
-    #     }
-    #     return Response(response_data, status=status.HTTP_200_OK)
-
-    
 
 class CreateTokenView(ObtainAuthToken):
     """Create a new auth token for user."""
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
 
- 
 def activate_user(request, user_id):
     user = get_object_or_404(CustomUser, pk=user_id)
     user.is_active = True
     user.save()
     return JsonResponse({'message': 'User activated successfully.'})
-
 
 class SignUp(ObtainAuthToken): 
     def post(self, request, *args, **kwargs):
@@ -94,7 +64,6 @@ def create_user_from_request_data(request_data):
         password=hashed_password,
     )
     return user
-
 
 # def send_register_mail_to_newuser(user):
 #     """

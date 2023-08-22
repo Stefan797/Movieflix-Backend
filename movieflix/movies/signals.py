@@ -23,7 +23,7 @@ def movie_post_save(sender, instance, created, **kwargs):
     if created: 
         print('New object created')
         queue = django_rq.get_queue('default', autocommit=True)
-        queue.enqueue(convert_720p, instance.movie_file.path)
-        queue.enqueue(convert_480p, instance.movie_file.path)
+        queue.enqueue(convert_720p, instance.movie_file.path, timeout=1000)
+        queue.enqueue(convert_480p, instance.movie_file.path, timeout=1000)
         # convert480p(instance.movie_file.path)
         # convert_720p(instance.video_file.path)
