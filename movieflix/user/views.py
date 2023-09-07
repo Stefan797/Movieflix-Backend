@@ -9,6 +9,7 @@ from .serializers import AuthTokenSerializer
 from rest_framework.settings import api_settings
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
+from rest_framework.authtoken.models import Token
 
 # Create your views here.
 
@@ -24,6 +25,22 @@ class CreateTokenView(ObtainAuthToken):
     """Create a new auth token for user."""
     serializer_class = AuthTokenSerializer
     renderer_classes = api_settings.DEFAULT_RENDERER_CLASSES
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        #print(token.key)
+        response_data = {
+            'username': user.username,
+            'email': user.email,
+            'user_id': user.pk,
+            'token': token.key,
+            'message': 'You loged in successfully.',
+        }
+        return Response(response_data, status=status.HTTP_201_CREATED)
 
 def activate_user(request, user_id):
     user = get_object_or_404(CustomUser, pk=user_id)

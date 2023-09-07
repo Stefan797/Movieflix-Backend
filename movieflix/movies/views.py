@@ -28,7 +28,7 @@ class MovieViewSet(viewsets.ModelViewSet):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
-    http_method_names = ['get'] # Automatisch nur get erlaubt in der kompleten View
+    #http_method_names = ['get'] # Automatisch nur get erlaubt in der kompletten View?
 
     @action(methods=['GET'], detail=True)
     def get_queryset(self):
@@ -45,13 +45,6 @@ class MovieViewSet(viewsets.ModelViewSet):
             print('z37', self.queryset)
         return self.queryset
 
-    @action(methods=['GET'], detail=True)
-    def load_movie(self, request, pk=None):
-        movie = self.get_object()
-        serializer = self.get_serializer(movie)
-        return Response(serializer.data)
-    
-    # @action(methods=['GET'], detail=True)
     def increase_likes(self, request, pk=None):
         movie = self.get_object()
         currentuser = request.user
@@ -69,15 +62,18 @@ class MovieViewSet(viewsets.ModelViewSet):
         
         return Response(response_data, status=status.HTTP_200_OK)
     
-    @action(methods=['GET'], detail=True)
     def change_category_to_mylist(self, request, pk=None):
         movie = self.get_object()
         currentuser = request.user
-        print(currentuser) 
-        currentuser.favorite_movies.add(movie)
+        if not currentuser.favorite_movies.filter(pk=movie.pk).exists():
+            currentuser.favorite_movies.add(movie)
+            response_data = {'movie_myList_response': 'Title wurde erfolgreich zu ihrer Liste hinzugefügt!'}
+            print(currentuser.liked_movies)
+        else: 
+            currentuser.favorite_movies.remove(movie)
+            response_data = {'movie_myList_response': 'Title wurde aus ihrer Liste entfernt!'}
 
-        return Response({'message': 'Category changed to mylist'})
-    
+        return Response(response_data, status=status.HTTP_200_OK)
     
     def search_movies(self, request):
         search_terms = request.query_params.get('search_terms')
@@ -98,7 +94,7 @@ class MovieViewSet(viewsets.ModelViewSet):
         serializer = MovieSerializer(queryset, many=True)
         return Response(serializer.data)
     
-    
+
 # Start Upload Movies
 
 @csrf_exempt
