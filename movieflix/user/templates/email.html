@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bestätigung Ihrer E-Mail-Adresse</title>
+    <style>
+        .m-t-b {
+            margin-top: 25px;
+            margin-bottom: 25px;
+        }
+        .logo-design {
+            width: 150px;
+            height: 30px;
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+    <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+            <td align="center"> <!---->
+                <table width="600" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 40px 0; text-align: center;"> <!--bgcolor="#ffffff"-->
+                            <p style="color: rgb(217,27,13); font-weight: bold; font-size: 25px;">Movieflix</p>
+                            <!-- <img src="user/templates/movieflix.PNG" alt="Movieflix" width="150px" height="30px" style="border-radius: 16px;"> -->
+                            <h1>Bitte bestätigen Sie Ihre E-Mail-Adresse</h1>
+                            <p>Liebe*r Nutzer*in {{ username }} von Movieflix,</p>
+                            <p>herzlichen Dank, dass Sie sich bei Movieflix angemeldet haben! Wir freuen uns sehr, Sie als Teil unserer Community begrüßen zu dürfen.</p>
+                            <p>Um sicherzustellen, dass Ihre E-Mail-Adresse korrekt ist und Sie vollen Zugriff auf alle Funktionen unserer Plattform haben, bitten wir Sie, Ihre E-Mail-Adresse zu bestätigen. Dies ist ein wichtiger Schritt, um die Sicherheit und Integrität Ihres Kontos zu gewährleisten.</p>
+                            <p style="margin: 25px 0 25px 0;"><a href="https://stefan-jonas.developerakademie.org/activate/{{ userID }}/" style="background-color: #007bff; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 5px; font-weight: bold;">Jetzt bestätigen</a></p>
+                            <p>Hinweis: Dieser Link ist nur 24 Stunden gültig. Bitte bestätigen Sie Ihre E-Mail-Adresse so bald wie möglich.</p>
+                            <p>Mit freundlichen Grüßen,<br/>Ihr Movieflix-Team</p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

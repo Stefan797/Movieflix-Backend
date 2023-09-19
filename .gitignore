@@ -6,6 +6,7 @@ __pycache__
 db.sqlite3
 movieflix/db.sqlite3
 media
+movieflix/movieflix/.env
 
 # Backup files #
 *.bak

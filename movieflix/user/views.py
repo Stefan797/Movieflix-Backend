@@ -10,6 +10,13 @@ from rest_framework.settings import api_settings
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import get_object_or_404
 from rest_framework.authtoken.models import Token
+from django.core.mail import send_mail
+from django.conf import settings
+
+
+from django.template.loader import render_to_string
+
+# from django.template import get_template
 
 # Create your views here.
 
@@ -60,7 +67,18 @@ class SignUp(ObtainAuthToken):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         user = create_user_from_request_data(request.data)
-        # send_register_mail_to_newuser(user)
+
+        #username = user.username
+        #email = user.email
+        #is_guest_user = username.startswith('Gast') and email.endswith('@test.com')
+
+        # if is_guest_user:
+        #     # Behandlung für Gastnutzer (z.B. keine Registrierungs-E-Mail senden)
+        #     pass
+        # else:
+        register_Mail_Response = send_register_mail_to_newuser(user)
+        
+        print(register_Mail_Response)
         response_data = {
             'username': user.username,
             'email': user.email,
@@ -82,19 +100,14 @@ def create_user_from_request_data(request_data):
     )
     return user
 
-# def send_register_mail_to_newuser(user):
-#     """
-#     Sends a email to the given user.
-    
-#     Parameters
-#     ----------
-#     user : CustomUser
-#         The user to send email to.
-#     """
-#     subject = 'welcome to Movieflix'
-#     message = f'Hi {user.username}, thank you for registering in Movieflix.'
-#     email_from = settings.EMAIL_HOST_USER
-#     recipient_list = [user.email]
+# from django.core.mail import EmailMultiAlternatives
 
-#     To do after confirm make is active true in database!!!
-#     send_mail( subject, message, email_from, recipient_list )
+def send_register_mail_to_newuser(user):
+    context = {'username': user.username, 'userID': user.id}
+    rendered = render_to_string("email.html", context)
+    subject = 'Welcome to Movieflix'
+    html_message = rendered
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [user.email]
+    #To do after confirm make is active true in database!!!
+    send_mail(subject, '',  email_from, recipient_list, html_message=html_message)

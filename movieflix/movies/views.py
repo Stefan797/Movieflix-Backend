@@ -107,8 +107,8 @@ def upload_movie(request):
         movie.title = movie_name
 
         # Create the "screenshots" directory if it doesn't exist
-        screenshot_dir = os.path.join('screenshots')
-        os.makedirs(screenshot_dir, exist_ok=True)
+        screenshot_dir = os.path.join('media/screenshots')
+        #os.makedirs(screenshot_dir, exist_ok=True)
 
         # Generate a valid screenshot filename with a number pattern
         screenshot_filename = os.path.splitext(os.path.basename(movie.movie_file.name))[0] + '_%d.png'
